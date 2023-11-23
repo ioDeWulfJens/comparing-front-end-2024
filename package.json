@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "@auth0/auth0-spa-js": "^2.1.2",
+    "dotenv": "^16.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.9.4"
+  }
+}
