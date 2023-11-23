@@ -1,8 +1,14 @@
-import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
-import './globals.css'
+import type { Metadata } from 'next';
+import { Roboto } from "next/font/google";
+import { UserProvider } from "@auth0/nextjs-auth0/client";
 
-const inter = Inter({ subsets: ['latin'] })
+import Image from "next/image";
+import Logo from "../../common/public/logo.svg";
+import Navigation from "./_components/Navigation";
+
+import './globals.scss';
+
+const roboto = Roboto({ subsets: ["latin"], weight: ["300","400", "700", "900"], display: "swap", preload: true, style: "normal" })
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -15,8 +21,25 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
-      <body className={inter.className}>{children}</body>
-    </html>
-  )
+    <UserProvider>
+      <html lang="en">
+        <body className={`${roboto.className} secondary-bg`}>
+          <main>
+            <header>
+              <Image
+                src={Logo}
+                alt="Application Logo"
+                className="logo"
+                width={100}
+                height={24}
+                priority
+              />
+              <Navigation />
+            </header>
+            <div className="container">{children}</div>
+          </main>
+        </body>
+      </html>
+    </UserProvider>
+  );
 }

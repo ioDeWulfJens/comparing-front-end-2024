@@ -1,0 +1,59 @@
+@use "./variables";
+@use "sass:map";
+
+header {
+  display: flex;  
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--primary-background-color);
+  padding: 0.5rem 2rem;
+
+  .logo {
+    display: block;
+    width: 80px;
+    filter: invert(1);
+  }
+
+  nav {
+    padding: 0 1rem;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  header {
+    .logo {
+      filter: invert(0);
+    }
+  }
+}
+
+.nav-list {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  .nav-item {
+    .nav-item-trigger {
+      display: block;
+      font-size: map.get(variables.$fonts, "fs");
+      line-height: map.get(variables.$fonts, "ls");
+      border: 1px solid var(--primary-background-color);
+      border-radius: 0.125em;
+      padding: 0.5rem 1rem;
+      text-decoration: none;
+
+      &:hover,
+      &:focus {
+      }
+    }
+    .nav-item-content {
+      display: block;
+    }
+  }
+}

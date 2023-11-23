@@ -1,0 +1,128 @@
+@use "./variables";
+@use "sass:map";
+@use "sass:meta";
+
+.primary-bg {
+  background-color: var(--primary-background-color);
+  color: var(--primary-text-color);
+}
+
+.secondary-bg {
+  background-color: var(--secondary-background-color);
+  color: var(--primary-text-color);
+}
+
+@media (prefers-color-scheme: dark) {
+  .secondary-bg {
+    background-color: var(--dark-grey-color);
+    color: white;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+html,
+body,
+*:before,
+*:after {
+  margin: 0;
+  padding: 0;
+  text-rendering: geometricPrecision;
+  -webkit-font-smoothing: antialiased;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  -webkit-font-smoothing: none;
+}
+
+main {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.container {
+  margin: 0 auto;
+  max-width: 1280px;
+  width: 90%;
+}
+@media only screen and (min-width: map.get(variables.$breakpoints, "m")) {
+  .container {
+    width: 85%;
+  }
+}
+@media only screen and (min-width: map.get(variables.$breakpoints, "l")) {
+  .container {
+    width: 70%;
+  }
+}
+.col .row {
+  margin-left: -0.75rem;
+  margin-right: -0.75rem;
+}
+
+.d-flex {
+  display: flex;
+}
+.f {
+  &-column {
+    flex-direction: column;
+  }
+  &-row {
+    flex-direction: row;
+  }
+  &-grow {
+    flex-grow: 1;
+  }
+  &-shrink {
+    flex-shrink: 1;
+  }
+  &-a {
+    &-center {
+      align-content: center;
+    }
+    &-start {
+      align-content: flex-start;
+    }
+    &-end {
+      align-content: flex-end;
+    }
+  }
+  &-a-i {
+    &-center {
+      align-items: center;
+    }
+    &-start {
+      align-items: flex-start;
+    }
+    &-end {
+      align-items: flex-end;
+    }
+  }
+  &-j {
+    &-center {
+      justify-content: center;
+    }
+    &-start {
+      justify-content: flex-start;
+    }
+    &-end {
+      justify-content: flex-end;
+    }
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  html {
+    color-scheme: dark;
+  }
+}
