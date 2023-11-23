@@ -3,7 +3,8 @@
 npm-debug.log
 yarn-error.log
 
-*.env
+.env
+.env*.local
 package-lock.json
 
 # IDEs and editors

@@ -1,4 +1,9 @@
 {
+  "name": "comparing-frameworks",
+  "version": "0.0.0",
+  "scripts": {
+    "install": "node scripts/install.sh"
+  },
   "dependencies": {
     "@auth0/auth0-spa-js": "^2.1.2",
     "dotenv": "^16.3.1"
