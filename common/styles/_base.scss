@@ -55,12 +55,12 @@ main {
   max-width: 1280px;
   width: 90%;
 }
-@media only screen and (min-width: map.get(variables.$breakpoints, "m")) {
+@media only screen and (min-width: map.get(variables.$breakpoints, "md")) {
   .container {
     width: 85%;
   }
 }
-@media only screen and (min-width: map.get(variables.$breakpoints, "l")) {
+@media only screen and (min-width: map.get(variables.$breakpoints, "lg")) {
   .container {
     width: 70%;
   }

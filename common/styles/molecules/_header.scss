@@ -1,4 +1,4 @@
-@use "./variables";
+@use "../variables";
 @use "sass:map";
 
 header {
@@ -11,7 +11,7 @@ header {
   z-index: 50;
   backdrop-filter: blur(8px);
   border-bottom: 1px solid var(--primary-background-color);
-  padding: 0.5rem 2rem;
+  padding: map.get(variables.$space, "sm") map.get(variables.$space, "xl");
 
   .logo {
     display: block;
@@ -44,8 +44,8 @@ header {
       font-size: map.get(variables.$fonts, "fs");
       line-height: map.get(variables.$fonts, "ls");
       border: 1px solid var(--primary-background-color);
-      border-radius: 0.125em;
-      padding: 0.5rem 1rem;
+      border-radius: var(--radius);
+      padding: map.get(variables.$fonts, "sm") map.get(variables.$fonts, "md");
       text-decoration: none;
 
       &:hover,

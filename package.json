@@ -5,7 +5,7 @@
     "install-all": "pushd angular; npm install; popd; pushd vue; npm install; popd; pushd svelte; npm install --force; popd; pushd react; npm install; popd;"
   },
   "dependencies": {
-    "@auth0/auth0-spa-js": "^2.1.2",
+    "dexie": "^3.2.4",
     "dotenv": "^16.3.1"
   },
   "devDependencies": {
