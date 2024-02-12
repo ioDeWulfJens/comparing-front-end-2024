@@ -1,0 +1,22 @@
+<div class="app-input" [class.disabled]="disabled">
+    @if(label){
+        <label for="inputField">{{ label }}</label>
+    }
+    
+    <input id="inputField" type="{{ type }}" [(ngModel)]="inputValue" (change)="onInputChange($event)" [disabled]="disabled" [required]="required">
+    @if(!valid && required){
+        <div>{{ "input.required" | translate }}</div>
+    }
+    @if(!valid && (type === 'number' && isNaN(inputValue))){
+        <div>{{ "input.invalid_number" | translate }}</div>
+    }
+    @if(!valid && type === 'email' && !isMailValid(inputValue)){
+        <div>{{ "input.invalid_email" | translate }}</div>
+    }
+    @if(!valid && minLength && inputValue.length < minLength){
+        <div>{{ "input.invalid_minlength" | translate: {value: minLength} }}</div>
+    }
+    @if(!valid && maxLength && inputValue.length > maxLength){
+        <div>{{ "input.invalid_maxlength" | translate: {value: maxLength} }}</div>
+    }
+</div>

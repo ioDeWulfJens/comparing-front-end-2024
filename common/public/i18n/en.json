@@ -1,0 +1,10 @@
+{
+    "input": {
+        "required":"This field is required.",
+        "invalid":"Invalid value.",
+        "invalid_email": "Please enter a valid email address.",
+        "invalid_number": "Please enter a valid number.",
+        "invalid_minlength": "Please enter at least {[value}} characters.",
+        "invalid_maxlength": "Please enter no more than {{value}} characters."
+    }
+}
