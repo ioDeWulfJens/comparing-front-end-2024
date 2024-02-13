@@ -63,3 +63,20 @@
         cursor: not-allowed;
       } 
 }
+
+input {
+  appearance: none;
+
+  font-size: 1em;
+  height: 2.25rem;
+  padding: map.get(variables.$space, "sm");
+
+  border: 1px solid variables.$primary;
+  border-radius: map.get(variables.$space, "sm");
+
+  &:disabled {
+    border: 0;
+    background-color: transparent;
+    padding: 0 0 0 map.get(variables.$space, "sm")
+  }
+}

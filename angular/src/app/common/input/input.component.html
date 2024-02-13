@@ -3,20 +3,20 @@
         <label for="inputField">{{ label }}</label>
     }
     
-    <input id="inputField" type="{{ type }}" [(ngModel)]="inputValue" (change)="onInputChange($event)" [disabled]="disabled" [required]="required">
-    @if(!valid && required){
+    <input id="inputField" type="{{ type }}" [formControl]="inputControl" [placeholder]="placeholder">
+    @if(inputControl.errors?.["required"]){
         <div>{{ "input.required" | translate }}</div>
     }
-    @if(!valid && (type === 'number' && isNaN(inputValue))){
+    @if(inputControl.errors?.["number"]){
         <div>{{ "input.invalid_number" | translate }}</div>
     }
-    @if(!valid && type === 'email' && !isMailValid(inputValue)){
+    @if(inputControl.errors?.["email"]){
         <div>{{ "input.invalid_email" | translate }}</div>
     }
-    @if(!valid && minLength && inputValue.length < minLength){
+    @if(inputControl.errors?.["minLength"]){
         <div>{{ "input.invalid_minlength" | translate: {value: minLength} }}</div>
     }
-    @if(!valid && maxLength && inputValue.length > maxLength){
+    @if(inputControl.errors?.["maxLength"]){
         <div>{{ "input.invalid_maxlength" | translate: {value: maxLength} }}</div>
     }
 </div>

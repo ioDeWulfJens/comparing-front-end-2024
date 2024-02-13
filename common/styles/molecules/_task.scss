@@ -5,6 +5,52 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: map.get(variables.$space, "sm");
     padding: map.get(variables.$space, "sm") 0;
-    border-bottom: 1px solid map.get(variables.$primary, "background-color");
+    border-bottom: 1px solid variables.$primary;
+
+    &--controls {
+        display: flex;
+        gap: map.get(variables.$space, "sm");
+        list-style: none;
+        padding: 0;
+    }
+    
+    &--control {
+    }
+
+    &:first-of-type {
+        border-top: 1px solid variables.$primary;
+    }
+
+    &--input {
+        flex: 1;
+
+        input {
+            width: 100%;
+        }
+    }
+}
+
+.tasks {
+    display: grid;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    &--header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: map.get(variables.$space, "sm");
+        padding: map.get(variables.$space, "md") 0;
+    }
+
+    &--input {
+        flex: 1;
+
+        input {
+            width: 100%;
+        }
+    }
 }

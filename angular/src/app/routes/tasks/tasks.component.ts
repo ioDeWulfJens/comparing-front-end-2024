@@ -1,16 +1,55 @@
-import { Component } from '@angular/core';
-
-import { InputComponent} from "../../common/input/input.component";
-import { TaskComponent } from "../../common/task/task.component";
+import { Component, OnInit } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
+
+import { TaskComponent } from '../../common/task/task.component';
+import { InputComponent } from '../../common/input/input.component';
+
+import { getTasks } from '../../../../../common/types/db';
+import { db } from '../../common/db';
+import { FormsModule } from '@angular/forms';
+import { AsyncPipe } from '@angular/common';
+import Task from '../../../../../common/types/task';
 
 @Component({
   selector: 'app-tasks',
   standalone: true,
-  imports: [TranslateModule, InputComponent, TaskComponent],
+  imports: [TranslateModule, FormsModule, TaskComponent, InputComponent, AsyncPipe],
   templateUrl: './tasks.component.html',
-  styleUrl: './tasks.component.scss'
+  styleUrl: './tasks.component.scss',
+  host: {ngSkipHydration: "true"}
 })
-export class TasksComponent {
+export class TasksComponent implements OnInit {
+  constructor() {}
 
+  tasks$ = getTasks(db);
+  tasks: Task[] = [];
+  newTask: string = "";
+
+  ngOnInit(): void {
+    getTasks(db).subscribe((tasks) => {
+      this.tasks = tasks;
+    });
+  }
+
+  async add(): Promise<void> {
+    const entry = await db.tasks.add({
+      description: this.newTask,
+      created_at: new Date(),
+      updated_at: new Date(),
+    });
+    if(entry){
+      this.newTask = "";
+    }
+  }
+
+  async edit(task: Task): Promise<void> {
+    if(!task.id) return;
+    await db.tasks.where("id").equals(task.id).modify({
+      ...task
+    });
+  }
+
+  async delete(id: string): Promise<void> {
+    await db.tasks.where("id").equals(id).delete();
+  }
 }

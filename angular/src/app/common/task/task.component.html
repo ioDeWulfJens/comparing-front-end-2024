@@ -1,1 +1,10 @@
-<p>task works!</p>
+<div class="task" [id]="id">
+  <app-input type="text" [(ngModel)]="description" [disabled]="!editable"
+  class="task--input" />
+  <ul class="task--controls">
+    <li class="task--control">
+      <button (click)="delete.emit()">{{ "task.delete" | translate }}</button>
+      <button (click)="edit()">{{ (editable ? "task.save" : "task.edit") | translate }}</button>
+    </li>
+  </ul>
+</div>

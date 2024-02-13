@@ -1,4 +1,5 @@
-import Dexie, { Table } from "dexie";
+import Dexie, { Table, liveQuery } from "dexie";
+import { indexedDB, IDBKeyRange } from "fake-indexeddb";
 import Task from "./task";
 
 
@@ -12,11 +13,13 @@ export class Database extends Dexie {
     tasks!: Table<Task>;
 
     constructor({name = "Database", version = 1}: DatabaseConfiguration) {
-        super(name);
+        super(name, typeof window === 'undefined' ? {indexedDB: indexedDB, IDBKeyRange} : undefined);
         this.version(version).stores({
             tasks: "++id, description, created_at, updated_at, completed_at"
         })
     }
+
 }
 
-export const db = new Database({name: process.env.DB_NAME, version: Number(process.env.DB_VERSION) || 1});
+export const getTasks = (db: Database) => liveQuery(() => db.tasks.toArray());
+

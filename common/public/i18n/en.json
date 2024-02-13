@@ -1,4 +1,12 @@
 {
+    "task": {
+        "add": "Add",
+        "placeholder": "Enter a task...",
+        "save": "Save",
+        "edit": "Edit",
+        "delete": "Delete",
+        "empty": "No tasks here yet..."
+    },
     "input": {
         "required":"This field is required.",
         "invalid":"Invalid value.",

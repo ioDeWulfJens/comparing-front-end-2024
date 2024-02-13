@@ -1,6 +1,6 @@
 
-import { Component, Input, OnInit } from '@angular/core';
-import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { Component, Input } from '@angular/core';
+import { ControlValueAccessor, FormControl, FormsModule, ReactiveFormsModule, NG_VALUE_ACCESSOR, Validators } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 
 type InputTypes = "text" | "password" | "date" | "number" | "datetime-local" | "email";
@@ -10,90 +10,93 @@ type InputTypes = "text" | "password" | "date" | "number" | "datetime-local" | "
   standalone: true,
   templateUrl: './input.component.html',
   styleUrls: ['./input.component.scss'],
-  imports: [TranslateModule, FormsModule ],
+  imports: [ReactiveFormsModule, TranslateModule, FormsModule ],
   providers: [{
     provide: NG_VALUE_ACCESSOR,
     useExisting: InputComponent,
     multi: true
   }]
 })
-export class InputComponent implements ControlValueAccessor, OnInit {
+export class InputComponent implements ControlValueAccessor {
 
-  @Input() type: InputTypes = 'text';
+  inputControl = new FormControl('');
   @Input() label: string | undefined;
-  @Input() disabled: boolean = false;
-  @Input() required: boolean = false;
-  @Input() minLength?: number;
-  @Input() maxLength?: number;
+  @Input() placeholder: string | undefined = "";
+  @Input() set disabled(isDisabled: boolean) { 
+    isDisabled ? this.inputControl.disable() : this.inputControl.enable(); 
+  }
 
-  valid: boolean = true;
+  private _type: InputTypes = "text";
+  @Input() set type(value: InputTypes) {
+    this._type = value;
+    this.setValidators();
+  }
+  get type(): InputTypes {
+    return this._type;
+  }
 
+  private _required: boolean = false;
+  @Input() set required(value: boolean) {
+    this._required = value;
+    this.setValidators();
+  }
+
+  private _minLength: number | undefined;
+  @Input() set minLength(value: number | undefined) {
+    this._minLength = value;
+    this.setValidators();
+  }
+
+  private _maxLength: number | undefined;
+  @Input() set maxLength(value: number | undefined) {
+    this._maxLength = value;
+    this.setValidators();
+  }
+
+  // ControlValueAccessor methods
   writeValue(value: any): void {
-    this.inputValue = value;
+    this.inputControl.setValue(value, { emitEvent: false });
   }
 
   registerOnChange(fn: any): void {
-    this.onChange = fn;
+    this.inputControl.valueChanges.subscribe(fn);
   }
 
   registerOnTouched(fn: any): void {
     this.onTouched = fn;
   }
 
-  inputValue: any;
-  onChange: any = () => {};
+  setDisabledState(isDisabled: boolean) {
+    this.disabled = isDisabled;
+  }
+
   onTouched: any = () => {};
 
-  ngOnInit() {
-    if (this.required) {
-      this.onChange({ value: this.inputValue, valid: !!this.inputValue });
-    }
-  }
+  private setValidators(): void {
+    const validators = [];
 
-  validate(): void {
-    let valid = true;
-
-    if (this.required && !this.inputValue) {
-      valid = false;
+    if (this._required) {
+      validators.push(Validators.required);
     }
 
-    switch (this.type) {
-      case 'number':
-        if (isNaN(this.inputValue)) {
-          valid = false;
-        }
+    if (this._minLength !== undefined) {
+      validators.push(Validators.minLength(this._minLength));
+    }
+
+    if (this._maxLength !== undefined) {
+      validators.push(Validators.maxLength(this._maxLength));
+    }
+
+    switch (this._type) {
+      case "email":
+        validators.push(Validators.email);
         break;
-      case 'email':
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.inputValue)) {
-          valid = false;
-        }
-        break;
-      default:
+      case "number":
+        validators.push(Validators.pattern("^[0-9]*$"));
         break;
     }
 
-    if (this.minLength && this.inputValue.length < this.minLength) {
-      valid = false;
-    }
-
-    if (this.maxLength && this.inputValue.length > this.maxLength) {
-      valid = false;
-    }
-    this.valid = valid;
-    this.onChange({ value: this.inputValue, valid: valid });
-  }
-
-  isMailValid(value: string): boolean {
-    return !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
-  }
-
-  isNaN(value: number): boolean {
-    return isNaN(value);
-  }
-
-  onInputChange(event: any) {
-    this.inputValue = event.target.value;
-    this.validate();
-    this.onTouched();
+    this.inputControl.setValidators(validators);
+    this.inputControl.updateValueAndValidity();
   }
 }
