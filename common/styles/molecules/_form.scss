@@ -30,7 +30,6 @@
     height: 1.15em;
     border: 0.15em solid currentColor;
     border-radius: 0.15em;
-    transform: translateY(-0.075em);
   
     display: grid;
     place-content: center;
@@ -56,15 +55,15 @@
         outline: max(2px, 0.15em) solid currentColor;
         outline-offset: max(2px, 0.15em);
     }
-     &:disabled {
+    &:disabled {
         --form-control-color: var(--form-control-disabled);
       
         color: var(--form-control-disabled);
         cursor: not-allowed;
-      } 
+    } 
 }
 
-input {
+input, .input {
   appearance: none;
 
   font-size: 1em;
@@ -74,7 +73,8 @@ input {
   border: 1px solid variables.$primary;
   border-radius: map.get(variables.$space, "sm");
 
-  &:disabled {
+  &:disabled,
+  &.disabled {
     border: 0;
     background-color: transparent;
     padding: 0 0 0 map.get(variables.$space, "sm")

@@ -1,10 +1,33 @@
-<div class="task" [id]="id">
-  <app-input type="text" [(ngModel)]="description" [disabled]="!editable"
-  class="task--input" />
-  <ul class="task--controls">
-    <li class="task--control">
-      <button (click)="delete.emit()">{{ "task.delete" | translate }}</button>
-      <button (click)="edit()">{{ (editable ? "task.save" : "task.edit") | translate }}</button>
-    </li>
-  </ul>
+<div class="task--wrapper" [id]="id">
+  <div class="task">
+    <app-checkbox [checked]="completed_at != null" (checkedChange)="complete($event)"/>
+    <app-input type="text" [(ngModel)]="description" [disabled]="!editable"
+    class="task--input" />
+    <div class="task--controls">
+      @if(!completed_at){
+        <button (click)="edit()" [attr.disabled]="!!completed_at ? true : null" class="pill-segment">{{ (editable ? "task.save" : "task.edit") | translate }}</button>
+      }
+      <button (click)="delete.emit()" class="pill-segment">{{ "task.delete" | translate }}</button>
+    </div>
+  </div>
+  <div class="task--meta">
+    @if(updated_at){
+      <div class="task--date" [title]="updated_at | date: 'yyyy-MM-dd, HH:mm'">
+        <span>{{("time.updated" | translate) }}</span>
+        <span>{{(formatDate(updated_at) | translate)}}</span>
+      </div>
+    } @else {
+      <div class="task--date" [title]="created_at | date: 'yyyy-MM-dd, HH:mm'">
+        <span>{{("time.created" | translate) }}</span>
+        <span>{{(formatDate(created_at) | translate)}}</span>
+      </div>
+    }
+
+    @if(completed_at){
+      <div class="task--date" [title]="completed_at | date: 'yyyy-MM-dd, HH:mm'">
+        <span>{{("time.completed" | translate) }}</span>
+        <span>{{(formatDate(completed_at) | translate)}}</span>
+      </div>
+    }
+  </div>
 </div>

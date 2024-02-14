@@ -5,22 +5,28 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    color: var(--primary-background-color);
     gap: map.get(variables.$space, "sm");
-    padding: map.get(variables.$space, "sm") 0;
-    border-bottom: 1px solid variables.$primary;
+    padding: map.get(variables.$space, "sm");
+    background: var(--secondary-background-color);
+
+    &--wrapper {
+        display: grid;
+        border-radius: map.get(variables.$space, "sm");
+        overflow: hidden;
+    }
+
+    &--handle {
+        width: 2rem;
+        height: 100%;
+        background: var(--grey-color);
+    }
 
     &--controls {
         display: flex;
-        gap: map.get(variables.$space, "sm");
+        gap: 1px;
         list-style: none;
         padding: 0;
-    }
-    
-    &--control {
-    }
-
-    &:first-of-type {
-        border-top: 1px solid variables.$primary;
     }
 
     &--input {
@@ -30,10 +36,34 @@
             width: 100%;
         }
     }
+
+    &--meta {
+        width: 100%;
+        display: flex;
+        gap: map.get(variables.$space, "sm");
+        padding: map.get(variables.$space, "xs") map.get(variables.$space, "sm");
+        background: var(--primary-background-color);
+    }
+
+    &--date {
+        display: flex;
+        align-items: center;
+        gap: map.get(variables.$space, "xs");
+        font-size: map.get(variables.$fonts, "xs");
+        line-height: 1em;
+
+        &:not(:last-child)::after {
+            content: "";
+            height: 100%;
+            width: 1px;
+            background: var(--secondary-background-color);
+        }
+    }
 }
 
 .tasks {
     display: grid;
+    gap: map.get(variables.$space, "md");
     list-style: none;
     padding: 0;
     margin: 0;
@@ -42,7 +72,6 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        gap: map.get(variables.$space, "sm");
         padding: map.get(variables.$space, "md") 0;
     }
 
@@ -51,6 +80,12 @@
 
         input {
             width: 100%;
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
         }
+    }
+
+    & + .tasks {
+        margin-top: map.get(variables.$space, "md");
     }
 }

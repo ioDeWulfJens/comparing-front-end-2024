@@ -21,13 +21,14 @@ import Task from '../../../../../common/types/task';
 export class TasksComponent implements OnInit {
   constructor() {}
 
-  tasks$ = getTasks(db);
   tasks: Task[] = [];
+  archivedTasks: Task[] = [];
   newTask: string = "";
 
   ngOnInit(): void {
     getTasks(db).subscribe((tasks) => {
-      this.tasks = tasks;
+      this.tasks = tasks.filter(({completed_at}) => !completed_at);
+      this.archivedTasks = tasks.filter(({completed_at}) => !!completed_at);
     });
   }
 

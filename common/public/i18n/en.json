@@ -5,7 +5,9 @@
         "save": "Save",
         "edit": "Edit",
         "delete": "Delete",
-        "empty": "No tasks here yet..."
+        "empty": "No uncompleted tasks...",
+        "archive": "Completed tasks",
+        "empty_archive": "No completed tasks yet..."
     },
     "input": {
         "required":"This field is required.",
@@ -14,5 +16,11 @@
         "invalid_number": "Please enter a valid number.",
         "invalid_minlength": "Please enter at least {[value}} characters.",
         "invalid_maxlength": "Please enter no more than {{value}} characters."
+    },
+    "a moment ago": "a moment ago",
+    "time": {
+        "created": "Created",
+        "updated": "Updated",
+        "completed": "Completed"
     }
 }

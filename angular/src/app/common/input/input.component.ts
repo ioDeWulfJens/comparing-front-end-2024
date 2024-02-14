@@ -2,6 +2,7 @@
 import { Component, Input } from '@angular/core';
 import { ControlValueAccessor, FormControl, FormsModule, ReactiveFormsModule, NG_VALUE_ACCESSOR, Validators } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
+import { filter } from 'rxjs';
 
 type InputTypes = "text" | "password" | "date" | "number" | "datetime-local" | "email";
 
@@ -20,10 +21,11 @@ type InputTypes = "text" | "password" | "date" | "number" | "datetime-local" | "
 export class InputComponent implements ControlValueAccessor {
 
   inputControl = new FormControl('');
+  @Input() id: string = "default-input-id";
   @Input() label: string | undefined;
   @Input() placeholder: string | undefined = "";
   @Input() set disabled(isDisabled: boolean) { 
-    isDisabled ? this.inputControl.disable() : this.inputControl.enable(); 
+    isDisabled ? this.inputControl.disable() : this.inputControl.enable();
   }
 
   private _type: InputTypes = "text";
@@ -55,11 +57,14 @@ export class InputComponent implements ControlValueAccessor {
 
   // ControlValueAccessor methods
   writeValue(value: any): void {
+    if(!value) return;
     this.inputControl.setValue(value, { emitEvent: false });
   }
 
   registerOnChange(fn: any): void {
-    this.inputControl.valueChanges.subscribe(fn);
+    this.inputControl.valueChanges
+    .pipe(filter(val => !!val))
+    .subscribe(fn);
   }
 
   registerOnTouched(fn: any): void {

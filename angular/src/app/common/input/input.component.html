@@ -1,21 +1,24 @@
 <div class="app-input" [class.disabled]="disabled">
     @if(label){
-        <label for="inputField">{{ label }}</label>
+        <label for="inputField-{{id}}">{{ label }}</label>
     }
-    
-    <input id="inputField" type="{{ type }}" [formControl]="inputControl" [placeholder]="placeholder">
+    <input id="inputField-{{id}}" type="{{ type }}" [formControl]="inputControl" [placeholder]="placeholder">
     @if(inputControl.errors?.["required"]){
         <div>{{ "input.required" | translate }}</div>
     }
+
     @if(inputControl.errors?.["number"]){
         <div>{{ "input.invalid_number" | translate }}</div>
     }
+
     @if(inputControl.errors?.["email"]){
         <div>{{ "input.invalid_email" | translate }}</div>
     }
+
     @if(inputControl.errors?.["minLength"]){
         <div>{{ "input.invalid_minlength" | translate: {value: minLength} }}</div>
     }
+
     @if(inputControl.errors?.["maxLength"]){
         <div>{{ "input.invalid_maxlength" | translate: {value: maxLength} }}</div>
     }

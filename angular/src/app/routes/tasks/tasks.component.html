@@ -1,9 +1,28 @@
 <div class="tasks--header">
     <app-input class="tasks--input" placeholder="{{ 'task.placeholder' | translate }}" [(ngModel)]="newTask" />
-    <button (click)="add()">{{ "task.add" | translate }}</button>
+    <button (click)="add()" class="pill-segment">{{ "task.add" | translate }}</button>
 </div>
 <ul class="tasks">
     @for (task of tasks; track task.id) {
+        <li>
+            <app-task 
+                [id]="task.id"
+                [description]="task.description"
+                [created_at]="task.created_at"
+                [updated_at]="task.updated_at"
+                [completed_at]="task.completed_at"
+                (delete)="delete(task.id!)"
+                (change)="edit($event)"
+            />
+        </li>
+    } @empty {
+        <li>{{ "task.empty" | translate }}</li>
+    }
+</ul>
+
+<h2 class="underlined">{{ "task.archive" | translate }}</h2>
+<ul class="tasks">
+    @for (task of archivedTasks; track task.id) {
         <li>
             <app-task 
                 [id]="task.id"
