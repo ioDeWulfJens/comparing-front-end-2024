@@ -28,7 +28,7 @@
             "assets": [
               "src/favicon.ico",
               "src/assets",
-              { "glob": "**/*", "input": "../common/public/i18n", "output": "./assets/i18n/" }
+              { "glob": "**/*", "input": "../common/public/locales", "output": "./assets/i18n/" }
             ],
             "styles": [
               "src/styles.scss"
