@@ -6,7 +6,7 @@
 
 $primary: #5576e6;
 $grey: #9d9d9d;
-$dark-grey: #3d3d3d;
+$dark-grey: #1c1b22;
 $secondary: rgba(255, 255, 255, 1);
 $secondary-hover: rgba(255, 255, 255, 0.7);
 $text-color: rgba(0, 0, 0, 0.87);
@@ -40,14 +40,16 @@ $space: (
 
 :root {
   --primary-background-color: #{$primary};
-  --primary-text-color: #{$secondary};
-  --primary-text-color-hover: #{$secondary-hover};
+  --primary-text-color: #{$text-color};
+  --primary-text-color-hover: #{$primary};
   --secondary-background-color: #{$secondary};
   --secondary-text-color: #{$text-color};
+  --highlight-text-color: #{$primary};
   --dark-grey-color: #{$dark-grey};
   --grey-color: #{$grey};
   --transparent-color: #{$transparent};
   --text-color: #{$text-color};
+  --button-text-color: #{$secondary};
   --shadow: #{$shadow};
   --radius: #{$radius};
   --breakpoints: $breakpoints;

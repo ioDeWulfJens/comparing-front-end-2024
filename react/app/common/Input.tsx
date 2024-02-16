@@ -15,7 +15,7 @@ type InputProps = {
     minLength?: number;
     maxLength?: number;
     value: string;
-    onChange?: (value: string) => void;
+    onChange: (value: string) => void;
     className?: string;
 }
 
@@ -32,32 +32,32 @@ const Input: FC<InputProps> = ({
     onChange,
     className,
 }) => {
-    
-  const [_value, setValue] = useState<string>(value);
-  const [errors, setErrors] = useState<ErrorTypes[]>([]);
-    const validate = () => {
+    const [errors, setErrors] = useState<ErrorTypes[]>([]);
+    const validate = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const val = event.target.value;
+        console.log({event});
         const newErrors: ErrorTypes[] = [];
-        if (required && _value.trim() === '') {
+        if (required && val.trim() === '') {
             newErrors.push("required");
         }
-        if (type === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(_value)) {
+        if (type === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)) {
             newErrors.push("email");
         }
-        if (type === 'number' && isNaN(parseFloat(_value))) {
+        if (type === 'number' && isNaN(parseFloat(val))) {
             newErrors.push("number");
         }
-        if (minLength && _value.length < minLength) {
+        if (minLength && val.length < minLength) {
             newErrors.push("minLength");
         }
-        if (maxLength && _value.length > maxLength) {
+        if (maxLength && val.length > maxLength) {
             newErrors.push("maxLength");
         }
         setErrors(newErrors);
-        onChange && onChange(_value);
+        onChange && onChange(val);
     }
     
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(event.target.value);
+    onChange(event.target.value)
     setErrors([]);
   };
 

@@ -13,7 +13,6 @@ export const metadata: Metadata = {
 const languages = ['en', 'nl'];
 
 export async function generateStaticParams() {
-  console.log({ languages });
   return languages.map((lng) => ({ lng }))
 }
 
@@ -31,7 +30,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang={lng} dir={dir(lng)}>
-      <body className={inter.className}>        
+      <body className="secondary-bg">
         <main className="container">
           <h1 className="underlined">Tasky</h1>
           {children}

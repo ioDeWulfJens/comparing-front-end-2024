@@ -32,7 +32,5 @@ export function middleware(req: NextRequest) {
     return response
   }
 
-  console.log({req, lng})
-
   return NextResponse.next()
 }

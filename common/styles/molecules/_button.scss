@@ -7,7 +7,7 @@ button {
   background: var(--primary-background-color);
   border: 1px solid var(--primary-background-color);
   border-radius: var(--radius);
-  color: var(--primary-text-color);
+  color: var(--button-text-color);
   cursor: pointer;
   font-size: map.get(variables.$fonts, "fs");
   line-height: map.get(variables.$fonts, "ls");

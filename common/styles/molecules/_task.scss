@@ -8,10 +8,11 @@
     color: var(--primary-background-color);
     gap: map.get(variables.$space, "sm");
     padding: map.get(variables.$space, "sm");
-    background: var(--secondary-background-color);
+    background: transparent;
 
     &--wrapper {
         display: grid;
+        border: 1px solid var(--primary-background-color);
         border-radius: map.get(variables.$space, "sm");
         overflow: hidden;
     }
@@ -34,6 +35,10 @@
 
         input {
             width: 100%;
+            color: var(--secondary-text-color);
+            @media (prefers-color-scheme: dark) {
+                color: white;
+            }
         }
     }
 
@@ -51,12 +56,23 @@
         gap: map.get(variables.$space, "xs");
         font-size: map.get(variables.$fonts, "xs");
         line-height: 1em;
+        color: var(--button-text-color);
 
         &:not(:last-child)::after {
             content: "";
+            position: relative;
+            left: 0.125em;
             height: 100%;
             width: 1px;
             background: var(--secondary-background-color);
+        }
+    }
+
+    &.complete {
+        .task--input {            
+            input {
+                color: var(--grey-color);
+            }
         }
     }
 }

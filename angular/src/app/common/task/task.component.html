@@ -1,8 +1,7 @@
 <div class="task--wrapper" [id]="id">
-  <div class="task">
+  <div class="task" [class.complete]="!!completed_at">
     <app-checkbox [checked]="completed_at != null" (checkedChange)="complete($event)"/>
-    <app-input type="text" [(ngModel)]="description" [disabled]="!editable"
-    class="task--input" />
+    <app-input type="text" [(ngModel)]="description" [disabled]="!editable" class="task--input" />
     <div class="task--controls">
       @if(!completed_at){
         <button (click)="edit()" [attr.disabled]="!!completed_at ? true : null" class="pill-segment">{{ (editable ? "task.save" : "task.edit") | translate }}</button>
