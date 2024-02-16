@@ -1,5 +1,5 @@
 import { iDatabase } from '@common/types/db';
-import { FireDatabaseConfiguration, addTask, app, getStore, getTasks, updateTask } from '@common/types/fdb';
+import { FireDatabaseConfiguration, addTask, app, getStore, watchTasks, updateTask } from '@common/types/fdb';
 import Task from '@common/types/task';
 
 export const iDb = new iDatabase({
@@ -7,7 +7,7 @@ export const iDb = new iDatabase({
   version: process.env.NEXT_PUBLIC_DB_VERSION,
 });
 
-const fDatabaseConfiguration: FireDatabaseConfiguration = {
+export const fDatabaseConfiguration: FireDatabaseConfiguration = {
   apiKey: process.env['apiKey'],
   authDomain: process.env['authDomain'],
   projectId: process.env['projectId'],
@@ -16,14 +16,15 @@ const fDatabaseConfiguration: FireDatabaseConfiguration = {
   appId: process.env['appId'],
 };
 
-export const useStore = () => {
+const useStore = () => {
   return getStore(app(fDatabaseConfiguration));
 }
 
 export const useTasks = () => {
   const store = useStore();
   let tasks: Task[] = [];
-  getTasks(store, (snapshot) => {
+  console.log({ store, fDatabaseConfiguration })
+  watchTasks(store, (snapshot) => {
     tasks = snapshot.docs.map((doc): Task => {
       return {
         id: doc.id,
@@ -34,8 +35,9 @@ export const useTasks = () => {
 
   const createTask = (task: Partial<Task>) => addTask(store, task);
   const patchTask = (task: Partial<Task>) => updateTask(store, task);
-  
+
   return {
+    store,
     tasks,
     createTask,
     patchTask

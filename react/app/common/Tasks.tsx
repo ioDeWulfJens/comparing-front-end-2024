@@ -3,7 +3,7 @@ import { Fragment, useEffect, useState } from "react";
 import { languages, fallbackLng } from '../i18n/settings'
 import { useTranslation } from '../i18n/client'
 import Input from "./Input";
-import { iDb } from "./db";
+import { iDb, useTasks } from "./db";
 import TaskType from "@common/types/task";
 import { getTasks } from "@common/types/db";
 import { Task } from "./Task";
@@ -12,7 +12,7 @@ export default function Tasks({ lng }: { lng: string }) {
 
     if (languages.indexOf(lng) < 0) lng = fallbackLng;
     const { t } = useTranslation(lng);
-    
+    const temp = useTasks();
     const [task, setTask] = useState<string>('');
     const [tasks, setTasks] = useState<TaskType[]>([]);
     const [archivedTasks, setArchivedTasks] = useState<TaskType[]>([]);

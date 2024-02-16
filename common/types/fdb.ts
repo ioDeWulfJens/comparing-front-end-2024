@@ -10,6 +10,7 @@ import {
   doc,
   serverTimestamp,
   addDoc,
+  getDocs,
   DocumentReference,
   DocumentData,
 } from 'firebase/firestore';
@@ -29,10 +30,15 @@ export const app = (configuration: FirebaseOptions) =>
 
 export const getStore = (app: FirebaseApp): Firestore => getFirestore(app);
 
-export const getTasks = (
+export const watchTasks = (
   store: Firestore,
   callback: (snapshot: QuerySnapshot) => void
 ) => onSnapshot(query(collection(store, 'tasks')), callback);
+
+export const getTasks = async (
+  store: Firestore
+): Promise<QuerySnapshot<DocumentData, DocumentData>> =>
+  await getDocs(query(collection(store, 'tasks')));
 
 export const addTask = async (
   store: Firestore,
@@ -51,4 +57,3 @@ export const updateTask = async (
   created_at: serverTimestamp(),
   updated_at: serverTimestamp(),
 });
-
