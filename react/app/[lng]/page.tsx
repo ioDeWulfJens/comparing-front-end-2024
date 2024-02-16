@@ -6,7 +6,7 @@ export default async function Page({ params: { lng } }: {
     lng: string;
   };
 }) {
-  
+
   if (languages.indexOf(lng) < 0) lng = fallbackLng;
 
   return (
