@@ -35,7 +35,6 @@ const Input: FC<InputProps> = ({
     const [errors, setErrors] = useState<ErrorTypes[]>([]);
     const validate = (event: React.ChangeEvent<HTMLInputElement>) => {
         const val = event.target.value;
-        console.log({event});
         const newErrors: ErrorTypes[] = [];
         if (required && val.trim() === '') {
             newErrors.push("required");

@@ -3,47 +3,54 @@ import { Fragment, useEffect, useState } from "react";
 import { languages, fallbackLng } from '../i18n/settings'
 import { useTranslation } from '../i18n/client'
 import Input from "./Input";
-import { iDb, useTasks } from "./db";
 import TaskType from "@common/types/task";
-import { getTasks } from "@common/types/db";
 import { Task } from "./Task";
+import { getData, postData, removeData } from "../[lng]/page";
 
 export default function Tasks({ lng }: { lng: string }) {
 
     if (languages.indexOf(lng) < 0) lng = fallbackLng;
     const { t } = useTranslation(lng);
-    const temp = useTasks();
     const [task, setTask] = useState<string>('');
     const [tasks, setTasks] = useState<TaskType[]>([]);
+    const [activeTasks, setActiveTasks] = useState<TaskType[]>([]);
     const [archivedTasks, setArchivedTasks] = useState<TaskType[]>([]);
 
+
+    const onChange = async () => {
+        const res = await getData();
+        setTasks(res);
+    }
+
     const add = async (): Promise<void> => {
-        const entry = await iDb.tasks.add({
+        const entry = await postData({
             description: task,
             created_at: new Date(),
             updated_at: new Date(),
         });
         if (entry) {
             setTask("");
+            onChange();
         }
     }
 
     const edit = async (task: TaskType): Promise<void> => {
         if (!task.id) return;
-        await iDb.tasks.where("id").equals(task.id).modify({
-            ...task
-        });
+        await postData(task).finally(() => onChange());
     }
 
     const remove = async (id: string): Promise<void> => {
-        await iDb.tasks.where("id").equals(id).delete();
+        if(!id) return;
+        await removeData(id).finally(() => onChange());
     }
 
     useEffect(() => {
-        getTasks(iDb).subscribe((tasks) => {
-            setTasks(tasks.filter(({ completed_at }) => !completed_at));
-            setArchivedTasks(tasks.filter(({ completed_at }) => !!completed_at));
-        });
+        setActiveTasks(tasks.filter(({ completed_at }) => !completed_at));
+        setArchivedTasks(tasks.filter(({ completed_at }) => !!completed_at));
+    }, [tasks]);
+
+    useEffect(() => {
+        onChange();
     }, []);
 
     return (
@@ -55,7 +62,7 @@ export default function Tasks({ lng }: { lng: string }) {
                 </button>
             </div>
             <ul className="tasks">
-                {tasks.map(({ id, description, created_at, updated_at, completed_at }) =>
+                {activeTasks.map(({ id, description, created_at, updated_at, completed_at }) =>
                 (<li key={id}>
                     <Task
                         lng={lng}

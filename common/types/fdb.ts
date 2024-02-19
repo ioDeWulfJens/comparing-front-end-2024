@@ -13,6 +13,8 @@ import {
   getDocs,
   DocumentReference,
   DocumentData,
+  deleteDoc,
+  Timestamp,
 } from 'firebase/firestore';
 import Task from './task';
 
@@ -52,8 +54,25 @@ export const addTask = async (
 export const updateTask = async (
   store: Firestore,
   task: Partial<Task>
-): Promise<void> => await updateDoc(doc(store, 'tasks', task.id!), {
-  ...task,
-  created_at: serverTimestamp(),
-  updated_at: serverTimestamp(),
-});
+): Promise<void> => { 
+  delete task.created_at;
+  return await updateDoc(doc(store, 'tasks', task.id!), {
+    ...task,
+    updated_at: serverTimestamp(),
+    completed_at: task.completed_at || null
+  }).catch((reason) => { console.error(reason)});
+};
+
+export const removeTask = async (
+  store: Firestore,
+  id: string
+): Promise<void> => await deleteDoc(doc(store, 'tasks', id));
+
+export const convertTimestamp = (timestamp: Timestamp): Date => {
+		//extract the seconds and nanos values from your Firestore timestamp object
+		const { seconds, nanoseconds } = timestamp;
+		//combine the seconds and nanos values into a single timestamp in milliseconds
+		const milliseconds = seconds * 1000 + nanoseconds / 1e6;
+		//use Moment.js to convert the timestamp to a date
+		return new Date(milliseconds);
+}

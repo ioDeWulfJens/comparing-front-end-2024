@@ -30,20 +30,26 @@ export const Task: FC<TaskProps & {lng: string}> = ({
     if (languages.indexOf(lng) < 0) lng = fallbackLng;
     const { t } = useTranslation(lng);
     const [editing, setEditing] = useState<boolean>(false);
+    const [val, setValue] = useState<string>(description);
 
     const complete = (checked: boolean): void => {
         onChange({ id, description, completed_at: checked ? new Date() : undefined, created_at, updated_at });
     };
 
-    const edit = (value: string): void => {
-        onChange({ id, description: value, completed_at, created_at, updated_at: new Date() });
+    const edit = (): void => {
+        if(editing){
+            onChange({ id, description: val, completed_at, created_at, updated_at: new Date() });
+        }
+        setEditing(!editing);
     };
 
-    const formatDate = (date: Date): string => {
+    const formatDate = (date: Date | string): string => {
+        date = typeof date === "string" ? new Date(date) : date;
         return formatRelativeDate(date, "be-NL");
     };
 
-    const formatTimestamp = (date: Date): string => {
+    const formatTimestamp = (date: Date | string): string => {
+        date = typeof date === "string" ? new Date(date) : date;
         return date.toLocaleDateString("be-NL")
     }
 
@@ -51,9 +57,9 @@ export const Task: FC<TaskProps & {lng: string}> = ({
         <div className="task--wrapper" id={id}>
             <div className={`task ${!!completed_at ? "complete" : ""}`}>
                 <Checkbox checked={!!completed_at} onChange={complete} />
-                <Input id="task--input" className="task--input" type="text" value={description} disabled={!editing} onChange={edit} />
+                <Input id="task--input" className="task--input" type="text" value={val} disabled={!editing} onChange={(change) => setValue(change)} />
                 <div className="task--controls">
-                    {!completed_at && <button onClick={() => setEditing(!editing)} disabled={!!completed_at ? true : undefined} className="pill-segment">{ t(editing ? "task.save" : "task.edit") }</button>}
+                    {!completed_at && <button onClick={edit} disabled={!!completed_at ? true : undefined} className="pill-segment">{ t(editing ? "task.save" : "task.edit") }</button>}
                     <button onClick={() => onDelete(id)} className="pill-segment">{t("task.delete")}</button>
                 </div>
             </div>

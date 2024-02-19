@@ -1,5 +1,5 @@
 import { iDatabase } from '@common/types/db';
-import { FireDatabaseConfiguration, addTask, app, getStore, watchTasks, updateTask } from '@common/types/fdb';
+import { FireDatabaseConfiguration, addTask, app, getStore, watchTasks, updateTask, removeTask } from '@common/types/fdb';
 import Task from '@common/types/task';
 
 export const iDb = new iDatabase({
@@ -23,8 +23,9 @@ const useStore = () => {
 export const useTasks = () => {
   const store = useStore();
   let tasks: Task[] = [];
-  console.log({ store, fDatabaseConfiguration })
-  watchTasks(store, (snapshot) => {
+  
+
+  const watcher = watchTasks(store, (snapshot) => {
     tasks = snapshot.docs.map((doc): Task => {
       return {
         id: doc.id,
@@ -32,15 +33,17 @@ export const useTasks = () => {
       }
     })
   });
-
   const createTask = (task: Partial<Task>) => addTask(store, task);
   const patchTask = (task: Partial<Task>) => updateTask(store, task);
+  const deleteTask = async (id: string) => removeTask(store, id);
 
   return {
     store,
     tasks,
+    watcher,
     createTask,
-    patchTask
+    patchTask,
+    deleteTask
   }
 }
 
