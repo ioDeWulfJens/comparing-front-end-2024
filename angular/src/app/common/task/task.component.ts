@@ -50,6 +50,6 @@ export class TaskComponent implements Task {
   }
 
   formatDate(date: Date): string {
-    return formatRelativeDate(date, "be-NL");
+    return formatRelativeDate(typeof date === "string" ? new Date(date) : date, "be-NL");
   }
 }

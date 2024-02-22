@@ -15,6 +15,7 @@ import {
   DocumentData,
   deleteDoc,
   Timestamp,
+  FirestoreError,
 } from 'firebase/firestore';
 import Task from './task';
 
@@ -34,8 +35,9 @@ export const getStore = (app: FirebaseApp): Firestore => getFirestore(app);
 
 export const watchTasks = (
   store: Firestore,
-  callback: (snapshot: QuerySnapshot) => void
-) => onSnapshot(query(collection(store, 'tasks')), callback);
+  callback: (snapshot: QuerySnapshot) => void,
+  onError?: ((error: FirestoreError) => void) | undefined
+) => onSnapshot(query(collection(store, 'tasks')), callback, onError);
 
 export const getTasks = async (
   store: Firestore

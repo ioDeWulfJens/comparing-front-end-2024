@@ -29,7 +29,7 @@ export const appConfig: ApplicationConfig = {
     provideClientHydration(),
     importProvidersFrom([
       HttpClientModule, 
-      TranslateModule.forRoot(provideTranslation())
+      TranslateModule.forRoot(provideTranslation()),
     ]),
   ],
 };

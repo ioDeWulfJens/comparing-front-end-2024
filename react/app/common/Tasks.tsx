@@ -56,7 +56,7 @@ export default function Tasks({ lng }: { lng: string }) {
     return (
         <Fragment>
             <div className="tasks--header">
-                <Input className="tasks--input" id="task--input" type="text" value={task} onChange={setTask} />
+                <Input className="tasks--input" id="task--input" type="text" value={task} onChange={setTask} placeholder={t("task.placeholder")}/>
                 <button onClick={add} className="pill-segment">
                     {t("task.add")}
                 </button>

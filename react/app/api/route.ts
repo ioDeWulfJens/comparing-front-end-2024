@@ -15,7 +15,7 @@ export async function GET(){
       description: doc.data().description,
       created_at: doc.data().created_at.toDate(),
       updated_at: doc.data().updated_at.toDate(),
-      completed_at: doc.data().completed_at,
+      completed_at: typeof doc.data()["completed_at"] === "string" ? new Date(doc.data()["completed_at"]) : doc.data()["completed_at"]?.toDate(),
     })) as Task[];
       // Type assertion if needed
       return new Response(JSON.stringify(tasks), { status: 200 });

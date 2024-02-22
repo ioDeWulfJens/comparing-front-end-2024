@@ -29,7 +29,10 @@ export const useTasks = () => {
     tasks = snapshot.docs.map((doc): Task => {
       return {
         id: doc.id,
-        ...doc.data() as Task
+        description: doc.data().description,
+        created_at: doc.data().created_at.toDate(),
+        updated_at: doc.data().updated_at.toDate(),
+        completed_at: doc.data().completed_at,
       }
     })
   });

@@ -4,11 +4,10 @@ import { TranslateModule } from '@ngx-translate/core';
 import { TaskComponent } from '../../common/task/task.component';
 import { InputComponent } from '../../common/input/input.component';
 
-import { getTasks } from '../../../../../common/types/db';
-import { iDb } from '../../common/db';
 import { FormsModule } from '@angular/forms';
 import { AsyncPipe } from '@angular/common';
 import Task from '../../../../../common/types/task';
+import { TasksService } from '../../common/tasks.service';
 
 @Component({
   selector: 'app-tasks',
@@ -18,28 +17,31 @@ import Task from '../../../../../common/types/task';
     FormsModule,
     TaskComponent,
     InputComponent,
-    AsyncPipe,
+    AsyncPipe
   ],
   templateUrl: './tasks.component.html',
   styleUrl: './tasks.component.scss',
   host: { ngSkipHydration: 'true' },
 })
 export class TasksComponent implements OnInit {
-  constructor() {}
+  private tasksService: TasksService;
+  constructor(tasksService: TasksService) {
+    this.tasksService = tasksService;
+  }
 
   tasks: Task[] = [];
   archivedTasks: Task[] = [];
   newTask: string = '';
 
   ngOnInit(): void {
-    getTasks(iDb).subscribe((tasks) => {
+    this.tasksService.getTasks((tasks) => {
       this.tasks = tasks.filter(({ completed_at }) => !completed_at);
       this.archivedTasks = tasks.filter(({ completed_at }) => !!completed_at);
     });
   }
 
   async add(): Promise<void> {
-    const entry = await iDb.tasks.add({
+    const entry = await this.tasksService.addTask({
       description: this.newTask,
       created_at: new Date(),
       updated_at: new Date(),
@@ -51,15 +53,13 @@ export class TasksComponent implements OnInit {
 
   async edit(task: Task): Promise<void> {
     if (!task.id) return;
-    await iDb.tasks
-      .where('id')
-      .equals(task.id)
-      .modify({
-        ...task,
-      });
+    await this.tasksService.updateTask(task.id, {
+      ...task,
+    });
   }
 
   async delete(id: string): Promise<void> {
-    await iDb.tasks.where('id').equals(id).delete();
+    if (!id) return;
+    await this.tasksService.deleteTask(id);
   }
 }
