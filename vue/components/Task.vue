@@ -1,13 +1,13 @@
 <script setup lang="ts">
-    import type TaskType from "@common/types/task";
+    import type TaskType from "../../common/types/task";
     import { formatRelativeDate } from "../../common/utils/dateUtils";
 
     type TaskProps = {
         id: string
         description: string
-        completed_at?: Date
-        created_at: Date
-        updated_at: Date
+        completed_at?: Date | string
+        created_at: Date | string
+        updated_at: Date | string
         onChange: (task: TaskType) => void
         onDelete: (id: string) => void
     }
@@ -24,12 +24,16 @@
     const editing = ref<boolean>(false);
     const value = ref<string>(description);
     const complete = (checked: boolean): void => {
-        onChange({ id, description, completed_at: checked ? new Date() : undefined, created_at, updated_at });
+        const created = typeof created_at === "string" ? new Date(created_at) : created_at;
+        const updated = typeof updated_at === "string" ? new Date(updated_at) : updated_at;
+        onChange({ id, description, completed_at: checked ? new Date() : undefined, created_at: created, updated_at: updated });
     };
 
     const edit = (): void => {
-        if(editing){
-            onChange({ id, description: value.value, completed_at, created_at, updated_at: new Date() });
+        if(editing.value){
+            const created = typeof created_at === "string" ? new Date(created_at) : created_at;
+            const completed = typeof completed_at === "string" ? new Date(completed_at) : completed_at;
+            onChange({ id, description: value.value, completed_at: completed, created_at: created, updated_at: new Date() });
         }
         editing.value  = !editing.value;
     };
@@ -45,7 +49,7 @@
 
     const formatTimestamp = (date: Date | string): string => {
         date = typeof date === "string" ? new Date(date) : date;
-        return date.toLocaleDateString("be-NL")
+        return `${date.toLocaleDateString("be-NL")}, ${date.toLocaleTimeString("be-NL")}`;
     }
 </script>
 <template>
@@ -60,14 +64,14 @@
             </div>
         </div>
         <div class="task--meta">
-            <div class="task--date" :title="formatDate(updated_at || created_at)">
-                <span>{{ $t("task.created_at") }}</span>
-                <span>{{ formatDate(created_at) }}</span>
+            <div class="task--date" :title="formatTimestamp(updated_at || created_at)">
+                <span>{{ $t(updated_at !== created_at? "time.updated" : "time.created") }}</span>
+                <span>{{ formatDate(updated_at || created_at) }}</span>
             </div>
             <div v-if="completed_at" class="task--date"
-            :title="formatDate(completed_at)">
-                <span>{{ $t("task.completed_at") }}</span>
-                <span>{{ formatTimestamp(completed_at) }}</span>
+            :title="formatTimestamp(completed_at)">
+                <span>{{ $t("time.completed") }}</span>
+                <span>{{ formatDate(completed_at) }}</span>
             </div>
         </div>
     </div>

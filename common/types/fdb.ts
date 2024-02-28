@@ -16,6 +16,7 @@ import {
   deleteDoc,
   Timestamp,
   FirestoreError,
+  orderBy,
 } from 'firebase/firestore';
 import Task from './task';
 
@@ -42,7 +43,7 @@ export const watchTasks = (
 export const getTasks = async (
   store: Firestore
 ): Promise<QuerySnapshot<DocumentData, DocumentData>> =>
-  await getDocs(query(collection(store, 'tasks')));
+  await getDocs(query(collection(store, 'tasks'), orderBy('created_at', 'desc')));
 
 export const addTask = async (
   store: Firestore,
