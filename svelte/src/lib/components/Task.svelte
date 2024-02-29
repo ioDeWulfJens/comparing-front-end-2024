@@ -3,14 +3,26 @@
     import { formatRelativeDate } from "@/common/utils/dateUtils";
     import Input from "./Input.svelte";
     import Checkbox from "./Checkbox.svelte";
+    import { t } from "$lib/i18n";
 
-    export let id: string;
-    export let description: string;
-    export let completed_at: Date | string | undefined;
-    export let created_at: Date | string;
-    export let updated_at: Date | string;
-    export let onChange: (task: TaskType) => void;
-    export let onDelete: (id: string) => void;
+    type TaskProps = {
+        id: string
+        description: string
+        completed_at?: Date
+        created_at: Date
+        updated_at: Date
+        onChange: (task: TaskType) => void
+        onDelete: (id: string) => void
+    }
+    const {
+        id,
+        description,
+        completed_at,
+        created_at,
+        updated_at,
+        onChange,
+        onDelete,
+    } = $props<TaskProps>();
 
     let editing = $state<boolean>(false);
     let value = $state<string>(description);
@@ -50,10 +62,10 @@
         className="task--input" onChange={onValueChange} />
         <div class="task--controls">
             {#if !completed_at}
-                <button class="pill-segment" onClick={edit}>{ $t(editing ? "task.save" : "task.edit") }</button>
+                <button class="pill-segment" on:click={edit}>{ $t(editing ? "task.save" : "task.edit") }</button>
             {/if}
             
-            <button class="pill-segment" onClick={() => onDelete(id)}>{ $t("task.delete") }</button>
+            <button class="pill-segment" on:click={() => onDelete(id)}>{ $t("task.delete") }</button>
         </div>
     </div>
     <div class="task--meta">
