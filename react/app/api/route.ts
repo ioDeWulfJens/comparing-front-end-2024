@@ -1,5 +1,5 @@
 import { fDatabaseConfiguration } from '@/app/common/db';
-import { addTask, updateTask, removeTask, app, getStore, getTasks } from '@common/types/fdb';
+import { addTask, updateTask, app, getStore, getTasks } from '@common/types/fdb';
 import Task from '@common/types/task';
 import { NextRequest } from 'next/server';
 
@@ -34,19 +34,5 @@ export async function POST(req: NextRequest){
     return new Response(JSON.stringify({ id: (docRef || data).id, ...data }), { status: docRef ? 201 : 200 });
   } catch (error) {
     return new Response(JSON.stringify({ message: `Error ${data.id ? 'updating' : 'adding'} task`, error }), { status: 500 });
-  }
-}
-
-export async function DELETE(req: Request){
-  const { body } = await req.json();
-  const { id } = JSON.parse(body);
-  // Connect to Firestore
-  const store = getStore(app(fDatabaseConfiguration));
-  // Remove a task
-  try {
-    await removeTask(store, id);
-    return new Response(JSON.stringify({ message: 'Task removed successfully' }), { status: 200 });
-  } catch (error) {
-    return new Response(JSON.stringify({ message: 'Error removing task', error }), { status: 500 });
   }
 }

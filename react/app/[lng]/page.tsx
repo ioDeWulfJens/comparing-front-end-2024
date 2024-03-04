@@ -1,11 +1,12 @@
 import Task from "@common/types/task";
 import Tasks from "../common/Tasks"
 import { languages, fallbackLng } from '../i18n/settings'
+import { revalidate } from "../actions";
 
 const ENDPOINT = `${process.env.NEXT_PUBLIC_URL}/api`;
 
 export async function getData() {
-  const res = await fetch(ENDPOINT);
+  const res = await fetch(ENDPOINT, { next: { tags: ['tasks']} });
   // The return value is *not* serialized
   // You can return Date, Map, Set, etc.
  
@@ -40,7 +41,6 @@ export async function removeData(id: string) {
   const res = await fetch(`${ENDPOINT}/${id}`, {
     method: 'DELETE',
   });
-  
   if (!res.ok) {
     // This will activate the closest `error.js` Error Boundary
     throw new Error('Failed to remove data');
@@ -53,10 +53,7 @@ export default async function Page({ params: { lng } }: {
     lng: string;
   };
 }) {
-
   if (languages.indexOf(lng) < 0) lng = fallbackLng;
-
-  return (
-    <Tasks lng={lng} />
-  );
+  const tasks = await getData();
+  return <Tasks lng={lng} tasks={tasks} revalidator={revalidate} />;
 }

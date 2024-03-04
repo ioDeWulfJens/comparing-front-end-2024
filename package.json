@@ -2,7 +2,7 @@
   "name": "comparing-frameworks",
   "version": "0.0.0",
   "scripts": {
-    "install-all": "pushd angular; npm install; popd; pushd vue; npm install; popd; pushd svelte; npm install --force; popd; pushd react; npm install; popd;"
+    "install-all": "npm i; pushd angular; npm install; popd; pushd vue; npm install; popd; pushd svelte; npm install --force; popd; pushd react; npm install; popd;"
   },
   "dependencies": {
     "dexie": "^3.2.4",

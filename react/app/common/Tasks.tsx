@@ -1,26 +1,19 @@
 "use client";
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useState } from "react";
 import { languages, fallbackLng } from '../i18n/settings'
 import { useTranslation } from '../i18n/client'
 import Input from "./Input";
 import TaskType from "@common/types/task";
 import { Task } from "./Task";
-import { getData, postData, removeData } from "../[lng]/page";
+import { postData, removeData } from "../[lng]/page";
 
-export default function Tasks({ lng }: { lng: string }) {
+export default function Tasks({ lng, tasks = [], revalidator }: { lng: string; tasks: TaskType[]; revalidator: (tag: string) => void }) {
 
     if (languages.indexOf(lng) < 0) lng = fallbackLng;
     const { t } = useTranslation(lng);
     const [task, setTask] = useState<string>('');
-    const [tasks, setTasks] = useState<TaskType[]>([]);
-    const [activeTasks, setActiveTasks] = useState<TaskType[]>([]);
-    const [archivedTasks, setArchivedTasks] = useState<TaskType[]>([]);
-
-
-    const onChange = async () => {
-        const res = await getData();
-        setTasks(res);
-    }
+    const activeTasks = tasks.filter(({ completed_at }) => !completed_at);
+    const archivedTasks = tasks.filter(({ completed_at }) => !!completed_at);
 
     const add = async (): Promise<void> => {
         const entry = await postData({
@@ -30,28 +23,18 @@ export default function Tasks({ lng }: { lng: string }) {
         });
         if (entry) {
             setTask("");
-            onChange();
         }
     }
 
     const edit = async (task: TaskType): Promise<void> => {
         if (!task.id) return;
-        await postData(task).finally(() => onChange());
+        await postData(task).finally(() => revalidator("tasks"));
     }
 
     const remove = async (id: string): Promise<void> => {
         if(!id) return;
-        await removeData(id).finally(() => onChange());
+        await removeData(id).finally(() => revalidator("tasks"));
     }
-
-    useEffect(() => {
-        setActiveTasks(tasks.filter(({ completed_at }) => !completed_at));
-        setArchivedTasks(tasks.filter(({ completed_at }) => !!completed_at));
-    }, [tasks]);
-
-    useEffect(() => {
-        onChange();
-    }, []);
 
     return (
         <Fragment>
