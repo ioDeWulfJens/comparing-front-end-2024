@@ -38,7 +38,12 @@ export const watchTasks = (
   store: Firestore,
   callback: (snapshot: QuerySnapshot) => void,
   onError?: ((error: FirestoreError) => void) | undefined
-) => onSnapshot(query(collection(store, 'tasks')), callback, onError);
+) =>
+  onSnapshot(
+    query(collection(store, 'tasks'), orderBy('created_at', 'desc')),
+    callback,
+    onError
+  );
 
 export const getTasks = async (
   store: Firestore
