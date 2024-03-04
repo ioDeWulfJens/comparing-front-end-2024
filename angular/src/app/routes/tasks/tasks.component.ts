@@ -21,7 +21,6 @@ import { TasksService } from '../../common/tasks.service';
   ],
   templateUrl: './tasks.component.html',
   styleUrl: './tasks.component.scss',
-  host: { ngSkipHydration: 'true' },
 })
 export class TasksComponent implements OnInit {
   private tasksService: TasksService;

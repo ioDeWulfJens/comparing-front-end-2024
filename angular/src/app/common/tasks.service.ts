@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { FireDatabaseConfiguration, app, getStore, watchTasks, addTask, updateTask, removeTask } from '../../../../common/types/fdb';
-import { DocumentData, Firestore, FirestoreError, QuerySnapshot } from 'firebase/firestore';
+import { Firestore, FirestoreError } from 'firebase/firestore';
 import { FirebaseApp } from 'firebase/app';
 import Task from '../../../../common/types/task';
 
@@ -30,7 +30,7 @@ export class TasksService {
       id: doc.id,
       description: doc.data()["description"],
       created_at: doc.data()["created_at"].toDate(),
-      updated_at: doc.data()["updated_at"].toDate(),
+      updated_at: doc.data()["updated_at"]?.toDate(),
       completed_at: typeof doc.data()["completed_at"] === "string" ? new Date(doc.data()["completed_at"]) : doc.data()["completed_at"]?.toDate(),
     }))), onError);
   }
