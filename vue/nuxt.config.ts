@@ -7,4 +7,7 @@ export default defineNuxtConfig({
     vueI18n: './i18n.config.ts',
   },
   css: ['@/assets/styles/main.scss'],
+  devServer: {
+    port: 3333,
+  },
 });

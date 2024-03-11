@@ -7,8 +7,8 @@
     })
 </script>
 <template>
-    <main className="container">
-        <h1 className="underlined">Tasky</h1>
+    <main class="container">
+        <h1 class="underlined">Tasky</h1>
         <slot />
     </main>
 </template>
